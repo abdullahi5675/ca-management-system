@@ -1,0 +1,339 @@
+/* ============================================================
+   STUDENT PAGES SPECIFIC STYLING
+   student.css
+   ============================================================ */
+
+/* ── STUDENT LAYOUT ──────────────────────────────────────── */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Navbar */
+.app-header {
+  background: var(--student-primary);
+  color: white;
+  padding: var(--space-4) 0;
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.brand-icon {
+  font-size: 1.35rem;
+  color: var(--accent);
+}
+
+.user-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 0.8125rem;
+}
+
+.user-name {
+  font-weight: 700;
+  color: white;
+}
+
+.user-meta {
+  color: rgba(255,255,255,0.7);
+}
+
+.btn-logout {
+  background: rgba(255,255,255,0.12);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8125rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.btn-logout:hover {
+  background: var(--danger);
+  border-color: var(--danger);
+}
+
+/* ── STUDENT MAIN CONTENT ────────────────────────────────── */
+.app-main {
+  flex: 1;
+  padding: var(--space-8) 0;
+}
+
+/* Note: Shared components (.welcome-section, .filter-bar, .summary-grid) moved to style.css */
+
+/* CA Scores Table Panel */
+.scores-card {
+  margin-bottom: var(--space-8);
+}
+
+.score-cell-total {
+  font-weight: 700;
+  color: var(--student-primary);
+}
+
+/* Complaints Panel */
+.complaints-card {
+  margin-bottom: var(--space-8);
+}
+
+.complaints-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.complaint-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  background: var(--surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  transition: all var(--transition-fast);
+}
+
+.complaint-item:hover {
+  border-color: var(--border-dark);
+  box-shadow: var(--shadow-sm);
+  background: var(--surface);
+}
+
+.complaint-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.complaint-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.complaint-subject {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.complaint-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.complaint-snippet {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 450px;
+}
+
+/* ── COMPLAINT FORM STYLES ──────────────────────────────── */
+.form-card {
+  max-width: 680px;
+  margin: 0 auto var(--space-8);
+}
+
+.form-header-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--student-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.char-counter {
+  text-align: right;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ── COMPLAINT TRACKER THREAD ────────────────────────────── */
+.tracker-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+.tracker-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.tracker-header {
+  padding: var(--space-4) var(--space-5);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tracker-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.tracker-icon {
+  font-size: 1.15rem;
+  color: var(--student-primary);
+  transition: transform var(--transition-base);
+}
+
+.tracker-item.open .tracker-icon {
+  transform: rotate(180deg);
+}
+
+.tracker-title {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.tracker-body {
+  display: none;
+  padding: var(--space-5) var(--space-6);
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.tracker-item.open .tracker-body {
+  display: block;
+}
+
+.complaint-detail-desc {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  background: var(--surface-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-5);
+  border-left: 3px solid var(--student-primary);
+}
+
+.responses-thread {
+  margin-top: var(--space-5);
+}
+
+.thread-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.response-bubble {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+  background: #f8fafc;
+}
+
+.response-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+}
+
+.response-sender {
+  font-weight: 700;
+  color: var(--student-primary);
+}
+
+.response-date {
+  color: var(--text-muted);
+}
+
+.response-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+/* Footer */
+.app-footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: var(--space-6) 0;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: var(--space-3);
+    text-align: center;
+  }
+
+  .user-nav {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .user-info {
+    align-items: center;
+  }
+
+  .complaint-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .complaint-snippet {
+    max-width: 100%;
+  }
+}

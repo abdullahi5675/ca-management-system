@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lecturer Dashboard — CA &amp; Complaint System</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/lecturer.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="app-wrapper">
+
+    <!-- ── SIDEBAR ── -->
+    <nav class="sidebar lecturer-sidebar" id="sidebar">
+      <button class="sidebar-close-btn" id="sidebar-close-btn"><i class="bi bi-x"></i></button>
+      <div class="sidebar-header">
+        <div class="sidebar-logo-icon"><i class="bi bi-person-workspace"></i></div>
+        <div>
+          <div class="sidebar-logo-text">Faculty Admin</div>
+          <div class="sidebar-logo-sub">Lecturer Portal</div>
+        </div>
+      </div>
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar" id="sidebar-user-avatar">L</div>
+        <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+        <div class="sidebar-user-meta" id="sidebar-user-meta"><i class="bi bi-shield-check" style="font-size:0.7rem;"></i> Verified Lecturer</div>
+      </div>
+      <nav class="sidebar-nav">
+        <span class="sidebar-section-label">Navigation</span>
+        <a href="dashboard.html" class="nav-item active">
+          <i class="bi bi-speedometer2 nav-icon"></i>Dashboard
+        </a>
+        <a href="courses.html" class="nav-item">
+          <i class="bi bi-journals nav-icon"></i>Manage Courses
+        </a>
+        <a href="complaints.html" class="nav-item">
+          <i class="bi bi-chat-dots nav-icon"></i>Complaints Inbox
+          <span class="nav-badge" id="complaint-badge" style="display:none;">0</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn-sidebar-logout" id="logout-btn">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+      </div>
+    </nav>
+
+    <!-- ── MAIN ── -->
+    <div class="main-wrapper">
+      <header class="mobile-topbar lecturer-topbar" id="mobile-topbar">
+        <button class="hamburger-btn" id="hamburger-btn"><i class="bi bi-list"></i></button>
+        <div class="mobile-topbar-center">
+          <span class="mobile-topbar-brand">Faculty Admin</span>
+          <span class="mobile-topbar-user" id="mobile-topbar-user">Lecturer</span>
+        </div>
+        <div style="width:40px"></div>
+      </header>
+
+      <main class="app-main">
+        <div class="container">
+
+          <!-- Welcome -->
+          <section class="welcome-section lecturer-welcome slide-up">
+            <h1 class="welcome-title">Welcome to the Grading Suite!</h1>
+            <p class="welcome-subtitle">Register classes, enter or import scores, and respond to student grade disputes.</p>
+          </section>
+
+          <!-- Stat Cards -->
+          <section class="summary-grid slide-up" style="animation-delay:0.1s;">
+            <div class="stat-card">
+              <div class="stat-icon" style="background:rgba(15,76,92,0.1);color:var(--lecturer-primary)">
+                <i class="bi bi-file-earmark-lock-fill"></i>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value" id="stat-total-drafts">0</div>
+                <div class="stat-label">Draft Score Sheets</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:rgba(34,197,94,0.1);color:var(--success)">
+                <i class="bi bi-file-earmark-check-fill"></i>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value" id="stat-total-published">0</div>
+                <div class="stat-label">Published Sheets</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:rgba(239,68,68,0.1);color:var(--danger)">
+                <i class="bi bi-chat-left-dots-fill"></i>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value" id="stat-total-complaints">0</div>
+                <div class="stat-label">Pending Complaints</div>
+              </div>
+            </div>
+          </section>
+
+          <div style="display:grid;grid-template-columns:1.8fr 1.2fr;gap:var(--space-8);margin-top:var(--space-8);" class="main-grid-cols slide-up" style="animation-delay:0.2s;">
+            
+            <!-- Quick Actions Panel -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title"><i class="bi bi-lightning-charge-fill" style="color:var(--accent);"></i> Administrative Quick Links</h3>
+              </div>
+              <div class="card-body" style="display:flex;flex-direction:column;gap:var(--space-4);">
+                <p>Welcome to your academic continuous assessment portal. Use the shortcuts below to manage your classes:</p>
+                <div class="grid-2" style="margin-top:var(--space-2);">
+                  <a href="courses.html" class="btn btn-lecturer btn-lg" style="display:flex;flex-direction:column;gap:var(--space-2);padding:var(--space-6);">
+                    <i class="bi bi-journal-plus" style="font-size:1.8rem;"></i>
+                    <span>Register New Course</span>
+                  </a>
+                  <a href="courses.html" class="btn btn-outline btn-lg" style="display:flex;flex-direction:column;gap:var(--space-2);padding:var(--space-6);">
+                    <i class="bi bi-journals" style="font-size:1.8rem;"></i>
+                    <span>View Course Catalog</span>
+                  </a>
+                </div>
+                <div style="margin-top:var(--space-2);">
+                  <a href="complaints.html" class="btn btn-outline btn-full" style="padding:var(--space-4);">
+                    <i class="bi bi-chat-dots-fill" style="margin-right:8px;"></i> Open Complaints Inbox
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Student Complaints summary list -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title"><i class="bi bi-chat-left-text-fill" style="color:var(--danger)"></i> Recent Complaints</h3>
+                <a href="complaints.html" class="btn btn-outline btn-sm">Inbox</a>
+              </div>
+              <div class="card-body">
+                <div id="recent-complaints-list" class="flex flex-col gap-4">
+                  <!-- Loaded dynamically -->
+                  <div class="text-center text-muted p-4">Loading complaints...</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </main>
+
+      <footer class="app-footer">
+        <div class="container">
+          <p>&copy; 2026 CA &amp; Complaint Management System. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/lecturer.js"></script>
+</body>
+</html>

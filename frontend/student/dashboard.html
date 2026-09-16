@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard — CA & Complaint System</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/student.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+  <!-- Sidebar Backdrop (mobile) -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="app-wrapper">
+
+    <!-- ── SIDEBAR ── -->
+    <nav class="sidebar" id="sidebar">
+      <button class="sidebar-close-btn" id="sidebar-close-btn"><i class="bi bi-x"></i></button>
+
+      <div class="sidebar-header">
+        <div class="sidebar-logo-icon"><i class="bi bi-mortarboard-fill"></i></div>
+        <div>
+          <div class="sidebar-logo-text">CA Portal</div>
+          <div class="sidebar-logo-sub">Student Section</div>
+        </div>
+      </div>
+
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar" id="sidebar-user-avatar">A</div>
+        <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+        <div class="sidebar-user-meta" id="sidebar-user-meta">Loading...</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="sidebar-section-label">Navigation</span>
+        <a href="dashboard.html" class="nav-item active">
+          <i class="bi bi-speedometer2 nav-icon"></i>
+          Dashboard
+        </a>
+        <a href="complaint-form.html" class="nav-item">
+          <i class="bi bi-chat-left-text nav-icon"></i>
+          File a Complaint
+        </a>
+        <a href="complaints-tracker.html" class="nav-item">
+          <i class="bi bi-list-check nav-icon"></i>
+          Track Complaints
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="btn-sidebar-logout" id="logout-btn">
+          <i class="bi bi-box-arrow-right"></i>
+          Logout
+        </button>
+      </div>
+    </nav>
+
+    <!-- ── MAIN CONTENT ── -->
+    <div class="main-wrapper">
+
+      <!-- Mobile Top Bar -->
+      <header class="mobile-topbar" id="mobile-topbar">
+        <button class="hamburger-btn" id="hamburger-btn">
+          <i class="bi bi-list"></i>
+        </button>
+        <div class="mobile-topbar-center">
+          <span class="mobile-topbar-brand">CA Portal</span>
+          <span class="mobile-topbar-user" id="mobile-topbar-user">Student</span>
+        </div>
+        <div style="width:40px"></div>
+      </header>
+
+      <main class="app-main">
+        <div class="container">
+
+          <!-- Welcome Banner -->
+          <section class="welcome-section slide-up">
+            <h1 class="welcome-title">Welcome to your Grade Dashboard!</h1>
+            <p class="welcome-subtitle">Monitor your continuous assessment scores and track resolution of filed complaints.</p>
+          </section>
+
+          <!-- Filters Bar -->
+          <section class="filter-bar slide-up" style="animation-delay: 0.1s;">
+            <div class="filter-title"><i class="bi bi-funnel"></i> Filter by Session / Semester</div>
+            <div class="filter-selects">
+              <select id="session-select" class="form-control select-sm">
+                <option value="2020/2021">2020/2021 Session</option>
+                <option value="2021/2022">2021/2022 Session</option>
+                <option value="2022/2023">2022/2023 Session</option>
+                <option value="2023/2024">2023/2024 Session</option>
+                <option value="2024/2025">2024/2025 Session</option>
+                <option value="2025/2026" selected>2025/2026 Session</option>
+              </select>
+              <select id="semester-select" class="form-control select-sm">
+                <option value="1" selected>1st Semester</option>
+                <option value="2">2nd Semester</option>
+              </select>
+              <button id="filter-btn" class="btn btn-primary btn-sm">
+                <i class="bi bi-search"></i> Search
+              </button>
+            </div>
+          </section>
+
+          <!-- Stat Cards -->
+          <section class="summary-grid slide-up" style="animation-delay: 0.15s;">
+            <div class="stat-card">
+              <div class="stat-icon" style="background:rgba(26,43,95,0.1);color:var(--student-primary)">
+                <i class="bi bi-award-fill"></i>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value" id="stat-avg-score">0.0%</div>
+                <div class="stat-label">Average CA Score</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:rgba(245,166,35,0.1);color:var(--accent)">
+                <i class="bi bi-chat-left-text-fill"></i>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value" id="stat-total-complaints">0</div>
+                <div class="stat-label">Complaints Filed</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:rgba(239,68,68,0.1);color:var(--danger)">
+                <i class="bi bi-hourglass-split"></i>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value" id="stat-pending-complaints">0</div>
+                <div class="stat-label">Pending Complaints</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- CA Scores Table + Recent Complaints -->
+          <div style="display:grid;grid-template-columns:2fr 1.2fr;gap:var(--space-8);margin-top:var(--space-8);" class="main-grid-cols slide-up" style="animation-delay:0.2s;">
+
+            <!-- Formal Score Sheet Card -->
+            <div class="card scores-card" id="printable-score-sheet">
+              <div class="card-header" style="flex-wrap:wrap;gap:var(--space-3);">
+                <div>
+                  <h3 class="card-title" style="color:var(--student-primary);display:flex;align-items:center;gap:6px;">
+                    <i class="bi bi-journal-check"></i> Statement of Continuous Assessment Results
+                  </h3>
+                  <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Official Published Assessment Records</div>
+                </div>
+                <div class="flex gap-2">
+                  <button id="download-sheet-btn" class="btn btn-primary btn-sm">
+                    <i class="bi bi-printer-fill"></i> Print / Download PDF
+                  </button>
+                </div>
+              </div>
+              <div class="card-body" style="padding:var(--space-5);">
+
+                <!-- Result Sheet Header Block -->
+                <div class="sheet-header-block" style="border:2px solid var(--border);border-radius:var(--radius-md);padding:var(--space-4);background:var(--surface-2);margin-bottom:var(--space-5);">
+                  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                    <div>
+                      <div style="font-weight:800;font-size:1.05rem;color:var(--student-primary);" id="sheet-student-name">Loading...</div>
+                      <div style="font-size:0.85rem;color:var(--text-secondary);" id="sheet-student-meta">Loading student info...</div>
+                    </div>
+                    <div style="text-align:right;">
+                      <div style="font-size:0.8rem;font-weight:700;color:var(--text-primary);" id="sheet-session-label">2025/2026 Session</div>
+                      <div style="font-size:0.75rem;color:var(--success);font-weight:700;"><i class="bi bi-shield-check"></i> Authoritative &amp; Verified</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="table-wrapper" style="border:1px solid var(--border);border-radius:var(--radius-md);">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Code</th>
+                        <th>Course Title</th>
+                        <th>Lecturer</th>
+                        <th class="text-center">Assgn</th>
+                        <th class="text-center">Quiz</th>
+                        <th class="text-center">Attend</th>
+                        <th class="text-center">Test</th>
+                        <th class="text-center">Others</th>
+                        <th class="text-center">Total /40</th>
+                        <th class="text-center">Remark</th>
+                      </tr>
+                    </thead>
+                    <tbody id="scores-table-body"></tbody>
+                  </table>
+                </div>
+
+                <div style="margin-top:var(--space-4);display:flex;justify-content:space-between;align-items:center;font-size:0.75rem;color:var(--text-muted);">
+                  <span>* Total score is computed out of 40.0 maximum Continuous Assessment allocation.</span>
+                  <span>Generated on: <span id="sheet-date">Today</span></span>
+                </div>
+
+              </div>
+            </div>
+
+
+            <!-- Recent Complaints -->
+            <div class="card complaints-card">
+              <div class="card-header">
+                <h3 class="card-title"><i class="bi bi-chat-right-quote"></i> Recent Complaints</h3>
+                <a href="complaint-form.html" class="btn btn-primary btn-sm">
+                  <i class="bi bi-plus-circle"></i> File New
+                </a>
+              </div>
+              <div class="card-body">
+                <div class="complaints-list" id="complaints-list"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </main>
+
+      <footer class="app-footer">
+        <div class="container">
+          <p>&copy; 2026 CA &amp; Complaint Management System. All rights reserved.</p>
+        </div>
+      </footer>
+    </div><!-- /main-wrapper -->
+  </div><!-- /app-wrapper -->
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/student.js"></script>
+</body>
+</html>

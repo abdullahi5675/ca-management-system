@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lecturer Registration — CA & Complaint System</title>
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  
+  <!-- Bootstrap Icons CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+  <div class="auth-page">
+    
+    <!-- Left Hero Panel (Teal Themed) -->
+    <div class="auth-hero lecturer-hero">
+      <div class="hero-blob hero-blob-1" style="background: var(--accent);"></div>
+      <div class="hero-blob hero-blob-2" style="background: rgba(15,76,92,0.3);"></div>
+      
+      <div class="hero-badge" style="background: rgba(255,255,255,0.15);">
+        <i class="bi bi-person-badge-fill hero-icon"></i>
+        <span>Faculty Administration Portal</span>
+      </div>
+      
+      <h1 class="hero-title">Continuous <span>Assessment</span> System</h1>
+      <p class="hero-desc">Register your academic profile to manage course enrollment records, upload continuous assessment metrics and resolve student grade disputes.</p>
+      
+      <div class="hero-features">
+        <div class="hero-feature">
+          <div class="hero-feature-dot"><i class="bi bi-check"></i></div>
+          <span>Bulk CSV Score Imports & Routing</span>
+        </div>
+        <div class="hero-feature">
+          <div class="hero-feature-dot"><i class="bi bi-check"></i></div>
+          <span>Draft & Publish Grading Workflows</span>
+        </div>
+        <div class="hero-feature">
+          <div class="hero-feature-dot"><i class="bi bi-check"></i></div>
+          <span>Grievance Resolution Boards</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Form Panel -->
+    <div class="auth-form-panel">
+      <div class="auth-form-card">
+        
+        <div class="auth-form-top">
+          <a href="/" class="auth-logo">
+            <div class="auth-logo-icon lecturer-icon">
+              <i class="bi bi-person-lines-fill"></i>
+            </div>
+            <span class="auth-logo-text">Lecturer Portal</span>
+          </a>
+          <a href="/student/register.html" class="btn btn-outline btn-sm">
+            <i class="bi bi-mortarboard-fill"></i> For Students
+          </a>
+        </div>
+        
+        <div class="auth-heading">
+          <h1>Faculty Registration</h1>
+          <p>Sign up using your department credentials and invitation code.</p>
+        </div>
+        
+        <form class="auth-form" id="lecturer-register-form" novalidate>
+          
+          <!-- Full Name -->
+          <div class="form-group">
+            <label class="form-label" for="name">Full Name<span class="required">*</span></label>
+            <div class="input-wrapper">
+              <i class="bi bi-person input-icon"></i>
+              <input type="text" id="name" class="form-control lecturer-focus" placeholder="Dr. Abubakar Musa" required>
+            </div>
+          </div>
+          
+          <!-- Email Address -->
+          <div class="form-group">
+            <label class="form-label" for="email">Institutional Email Address<span class="required">*</span></label>
+            <div class="input-wrapper">
+              <i class="bi bi-envelope input-icon"></i>
+              <input type="email" id="email" class="form-control lecturer-focus" placeholder="musa@university.edu.ng" required>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label class="form-label" for="password">Password<span class="required">*</span></label>
+            <div class="password-wrapper">
+              <div class="input-wrapper">
+                <i class="bi bi-lock input-icon"></i>
+                <input type="password" id="password" class="form-control lecturer-focus" placeholder="••••••••" required>
+              </div>
+              <button type="button" class="eye-toggle"><i class="bi bi-eye"></i></button>
+            </div>
+          </div>
+          
+          <!-- Confirm Password -->
+          <div class="form-group">
+            <label class="form-label" for="confirmPassword">Confirm Password<span class="required">*</span></label>
+            <div class="password-wrapper">
+              <div class="input-wrapper">
+                <i class="bi bi-lock-fill input-icon"></i>
+                <input type="password" id="confirmPassword" class="form-control lecturer-focus" placeholder="••••••••" required>
+              </div>
+              <button type="button" class="eye-toggle"><i class="bi bi-eye"></i></button>
+            </div>
+          </div>
+
+          <!-- Invitation Code -->
+          <div class="form-group">
+            <label class="form-label" for="inviteCode">Faculty Invitation Code<span class="required">*</span></label>
+            <div class="input-wrapper">
+              <i class="bi bi-shield-lock-fill input-icon"></i>
+              <input type="text" id="inviteCode" class="form-control invite-code-field lecturer-focus" placeholder="MUST2024SEC" required>
+            </div>
+            <span class="form-hint">Obtain registration code from department admins.</span>
+          </div>
+          
+          <!-- Submit -->
+          <button type="submit" class="auth-submit lecturer-btn">
+            <span class="spinner"></span>
+            <span class="btn-label"><i class="bi bi-person-plus-fill"></i> Accept Invite & Register</span>
+          </button>
+          
+        </form>
+        
+        <div class="auth-switch">
+          Already registered? <a href="/lecturer/login.html" class="lecturer-link">Lecturer Sign In</a>
+        </div>
+        
+      </div>
+    </div>
+    
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/utils.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+</body>
+</html>

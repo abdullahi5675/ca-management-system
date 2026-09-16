@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enter Scores — CA &amp; Complaint System</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/lecturer.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="app-wrapper">
+
+    <!-- ── SIDEBAR ── -->
+    <nav class="sidebar lecturer-sidebar" id="sidebar">
+      <button class="sidebar-close-btn" id="sidebar-close-btn"><i class="bi bi-x"></i></button>
+      <div class="sidebar-header">
+        <div class="sidebar-logo-icon"><i class="bi bi-person-workspace"></i></div>
+        <div>
+          <div class="sidebar-logo-text">Faculty Admin</div>
+          <div class="sidebar-logo-sub">Lecturer Portal</div>
+        </div>
+      </div>
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar" id="sidebar-user-avatar">L</div>
+        <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+        <div class="sidebar-user-meta" id="sidebar-user-meta"><i class="bi bi-shield-check" style="font-size:0.7rem;"></i> Verified Lecturer</div>
+      </div>
+      <nav class="sidebar-nav">
+        <span class="sidebar-section-label">Navigation</span>
+        <a href="dashboard.html" class="nav-item">
+          <i class="bi bi-speedometer2 nav-icon"></i>Dashboard
+        </a>
+        <a href="courses.html" class="nav-item active">
+          <i class="bi bi-journals nav-icon"></i>Manage Courses
+        </a>
+        <a href="complaints.html" class="nav-item">
+          <i class="bi bi-chat-dots nav-icon"></i>Complaints Inbox
+          <span class="nav-badge" id="complaint-badge" style="display:none;">0</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn-sidebar-logout" id="logout-btn">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+      </div>
+    </nav>
+
+    <!-- ── MAIN ── -->
+    <div class="main-wrapper">
+      <header class="mobile-topbar lecturer-topbar" id="mobile-topbar">
+        <button class="hamburger-btn" id="hamburger-btn"><i class="bi bi-list"></i></button>
+        <div class="mobile-topbar-center">
+          <span class="mobile-topbar-brand">Score Entry</span>
+          <span class="mobile-topbar-user" id="mobile-topbar-user">Lecturer</span>
+        </div>
+        <div style="width:40px"></div>
+      </header>
+
+      <main class="app-main">
+        <div class="container score-entry-container">
+
+          <!-- Locked/Published Warning Banner -->
+          <div id="lock-warning-banner" class="card p-4 fade-in hidden" style="background:#fef2f2;border-color:#fee2e2;color:#991b1b;margin-bottom:var(--space-2);display:flex;align-items:center;gap:12px;">
+            <i class="bi bi-lock-fill" style="font-size:1.5rem;color:#ef4444;"></i>
+            <div>
+              <div style="font-weight:700;">Score Sheet Published &amp; Locked</div>
+              <div style="font-size:0.8rem;color:#7f1d1d;">Students can now view these grades. Click the "Unpublish" button below to return this sheet to Draft state and resume editing.</div>
+            </div>
+          </div>
+
+          <!-- Top Action Bar -->
+          <div class="flex justify-between items-center mb-4 flex-wrap gap-3">
+            <a href="courses.html" class="btn btn-ghost btn-sm">
+              <i class="bi bi-arrow-left"></i> Course Catalog
+            </a>
+            <div class="flex gap-2">
+              <button id="unpublish-btn" class="btn btn-outline btn-sm hidden" style="color:var(--danger);border-color:var(--danger);">
+                <i class="bi bi-eye-slash"></i> Unpublish Scores
+              </button>
+              <button id="publish-btn" class="btn btn-success btn-sm">
+                <i class="bi bi-send-check"></i> Publish Scores
+              </button>
+            </div>
+          </div>
+
+          <!-- Course Header Bar -->
+          <section class="score-header-bar slide-up">
+            <div class="score-header-title">
+              <div class="score-course-code" id="course-code-title">Loading...</div>
+              <div class="score-course-name" id="course-name-title">Loading course...</div>
+              <span class="text-muted" style="font-size:0.8rem;margin-top:4px;" id="course-dept-lvl">Loading...</span>
+            </div>
+            <div>
+              <span id="status-badge" class="badge badge-draft score-status-badge">
+                <i class="bi bi-file-earmark-lock"></i> Draft
+              </span>
+            </div>
+          </section>
+
+          <!-- Tabs -->
+          <section class="tabs slide-up" style="animation-delay:0.1s;">
+            <button class="tab-btn active lecturer-tab" data-tab="manual-entry-tab" id="manual-tab-trigger">
+              <i class="bi bi-keyboard"></i> Manual Entry
+            </button>
+            <button class="tab-btn lecturer-tab" data-tab="csv-upload-tab" id="csv-tab-trigger">
+              <i class="bi bi-filetype-csv"></i> CSV Import
+            </button>
+          </section>
+
+          <!-- CSV Upload Tab -->
+          <div id="csv-upload-tab" class="tab-panel">
+            <div class="card p-6 slide-up">
+              <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+                <div>
+                  <h3 class="card-title" style="color:var(--lecturer-primary)">Bulk Score Import via CSV</h3>
+                  <p class="text-muted" style="font-size:0.85rem;">Upload a CSV file matching the course's weight distribution rules.</p>
+                </div>
+                <button id="download-template-btn" class="btn btn-outline btn-sm">
+                  <i class="bi bi-download"></i> Download Template
+                </button>
+              </div>
+
+              <div class="upload-dropzone" id="upload-dropzone">
+                <i class="bi bi-cloud-arrow-up-fill upload-icon"></i>
+                <div class="upload-title">Drag &amp; Drop score file here</div>
+                <div class="upload-subtitle">Only .csv files allowed · Max 5MB</div>
+                <input type="file" id="csv-file" class="upload-input-file" accept=".csv">
+              </div>
+
+              <div class="upload-actions" style="margin-top:var(--space-5);">
+                <button id="btn-upload-csv" class="btn btn-lecturer">
+                  <span class="spinner"></span>
+                  <span class="btn-text"><i class="bi bi-file-earmark-arrow-up"></i> Process &amp; Import CSV</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Manual Entry Tab -->
+          <div id="manual-entry-tab" class="tab-panel active">
+            <div class="card slide-up">
+              <div class="card-header">
+                <h3 class="card-title" style="color:var(--lecturer-primary)">
+                  <i class="bi bi-file-earmark-spreadsheet"></i> Manual Grading Sheet
+                </h3>
+                <!-- Batch-add bar -->
+                <div class="flex items-center gap-2" id="batch-add-controls">
+                  <span style="font-size:0.8rem;color:var(--text-secondary);white-space:nowrap;">Add rows:</span>
+                  <input type="number" id="batch-row-count" class="batch-num-input" value="5" min="1" max="100" title="Number of rows to add">
+                  <button id="add-row-btn" class="btn btn-outline btn-sm">
+                    <i class="bi bi-plus-lg"></i> Add Rows
+                  </button>
+                </div>
+              </div>
+
+              <div class="card-body" style="padding:0;">
+                <div class="table-wrapper" style="border:none;border-radius:0;overflow-x:auto;">
+                  <table class="table table-counter">
+                    <thead>
+                      <tr>
+                        <th style="min-width:160px;">#  Student Reg. Number</th>
+                        <th class="text-center" style="min-width:110px;" id="th-assignment">Assgn (Max: 10)</th>
+                        <th class="text-center" style="min-width:110px;" id="th-quiz">Quiz (Max: 10)</th>
+                        <th class="text-center" style="min-width:110px;" id="th-attendance">Attend (Max: 10)</th>
+                        <th class="text-center" style="min-width:110px;" id="th-test">Test (Max: 10)</th>
+                        <th class="text-center" style="min-width:110px;" id="th-others">Others (Max: 0)</th>
+                        <th class="text-center" style="min-width:90px;">Total /40</th>
+                        <th class="text-center" style="min-width:60px;" id="th-actions">Del</th>
+                      </tr>
+                    </thead>
+                    <tbody id="manual-table-body"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="card-footer" style="background:var(--surface-2);padding:var(--space-5) var(--space-6);">
+                <div class="flex justify-between items-center w-full flex-wrap gap-3">
+                  <span style="font-size:0.85rem;" class="text-muted">
+                    <i class="bi bi-info-circle"></i> Save as Draft first — publish when ready for students to view.
+                  </span>
+                  <div class="flex gap-3">
+                    <a href="courses.html" class="btn btn-outline">Cancel</a>
+                    <button id="save-draft-btn" class="btn btn-lecturer">
+                      <span class="spinner"></span>
+                      <span class="btn-text"><i class="bi bi-save-fill"></i> Save Scores</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary logs results panel container -->
+          <div id="results-log-container"></div>
+
+        </div>
+      </main>
+
+      <footer class="app-footer">
+        <div class="container">
+          <p>&copy; 2026 CA &amp; Complaint Management System. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/lecturer.js"></script>
+</body>
+</html>

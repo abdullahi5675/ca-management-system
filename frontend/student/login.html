@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Login — CA & Complaint System</title>
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  
+  <!-- Bootstrap Icons CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+  <div class="auth-page">
+    
+    <!-- Left Hero Panel -->
+    <div class="auth-hero student-hero">
+      <div class="hero-blob hero-blob-1"></div>
+      <div class="hero-blob hero-blob-2"></div>
+      
+      <div class="hero-badge">
+        <i class="bi bi-person-check-fill hero-icon"></i>
+        <span>Student CA Grade Portal</span>
+      </div>
+      
+      <h1 class="hero-title">Continuous <span>Assessment</span> Tracker</h1>
+      <p class="hero-desc">Log in with your academic credentials to verify test grades, assignment marks, and manage course disputes.</p>
+      
+      <div class="hero-features">
+        <div class="hero-feature">
+          <div class="hero-feature-dot"><i class="bi bi-shield-check"></i></div>
+          <span>Secure Role-Based Account Verification</span>
+        </div>
+        <div class="hero-feature">
+          <div class="hero-feature-dot"><i class="bi bi-bar-chart-fill"></i></div>
+          <span>Performance Indicators & Score Breakdowns</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Form Panel -->
+    <div class="auth-form-panel">
+      <div class="auth-form-card">
+        
+        <div class="auth-form-top">
+          <a href="/" class="auth-logo">
+            <div class="auth-logo-icon">
+              <i class="bi bi-mortarboard-fill"></i>
+            </div>
+            <span class="auth-logo-text">CA Portal</span>
+          </a>
+          <a href="/lecturer/login.html" class="btn btn-outline btn-sm">
+            <i class="bi bi-person-badge-fill"></i> Lecturer Login
+          </a>
+        </div>
+        
+        <div class="auth-heading">
+          <h1>Student Login</h1>
+          <p>Welcome back! Enter your matric number to access dashboard.</p>
+        </div>
+        
+        <form class="auth-form" id="student-login-form" novalidate>
+          
+          <!-- Registration Number -->
+          <div class="form-group">
+            <label class="form-label" for="reg_number">Matric / Registration Number</label>
+            <div class="input-wrapper">
+              <i class="bi bi-card-text input-icon"></i>
+              <input type="text" id="reg_number" class="form-control text-uppercase" placeholder="CSC/2022/001" required>
+            </div>
+          </div>
+          
+          <!-- Password -->
+          <div class="form-group">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <label class="form-label" for="password">Password</label>
+              <a href="forgot-password.html" style="font-size:0.8125rem;color:var(--student-primary);font-weight:600;">Forgot password?</a>
+            </div>
+            <div class="password-wrapper">
+              <div class="input-wrapper">
+                <i class="bi bi-lock input-icon"></i>
+                <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+              </div>
+              <button type="button" class="eye-toggle"><i class="bi bi-eye"></i></button>
+            </div>
+          </div>
+
+          
+          <!-- Submit -->
+          <button type="submit" class="auth-submit student-btn">
+            <span class="spinner"></span>
+            <span class="btn-label"><i class="bi bi-box-arrow-in-right"></i> Sign In</span>
+          </button>
+          
+        </form>
+        
+        <div class="auth-switch">
+          New to the portal? <a href="/student/register.html">Create Student Account</a>
+        </div>
+        
+      </div>
+    </div>
+    
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/utils.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+</body>
+</html>

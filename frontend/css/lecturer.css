@@ -1,0 +1,393 @@
+/* ============================================================
+   LECTURER PAGES SPECIFIC STYLING
+   lecturer.css
+   ============================================================ */
+
+/* Header Override */
+.app-header.lecturer-header {
+  background: var(--lecturer-primary);
+}
+
+.welcome-section.lecturer-welcome {
+  background: linear-gradient(135deg, var(--lecturer-primary) 0%, var(--lecturer-primary-light) 100%);
+}
+
+.welcome-section.lecturer-welcome::after {
+  background: rgba(255,255,255,0.05);
+}
+
+.text-lecturer-primary {
+  color: var(--lecturer-primary) !important;
+}
+
+/* ── COURSE GRID ────────────────────────────────────────── */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+
+.course-card {
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.course-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.course-card-header {
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.course-badge {
+  background: #f1f5f9;
+  color: var(--lecturer-primary);
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.course-code {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-top: var(--space-2);
+}
+
+.course-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+.course-card-body {
+  padding: var(--space-5) var(--space-6);
+  flex-grow: 1;
+}
+
+.course-meta-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+  font-size: 0.8125rem;
+}
+
+.course-meta-label {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.course-meta-value {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.course-stats-summary {
+  background: var(--surface-2);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-4);
+  border: 1px solid var(--border);
+}
+
+.course-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.course-stat-val {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.course-stat-lbl {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.course-card-footer {
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface-2);
+}
+
+/* ── SCORE ENTRY LAYOUT ──────────────────────────────────── */
+.score-entry-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.score-header-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.score-header-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.score-course-code {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--lecturer-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.score-course-name {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.score-status-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* CSV Upload Area */
+.upload-dropzone {
+  border: 2px dashed var(--border-dark);
+  border-radius: var(--radius-lg);
+  padding: var(--space-12) var(--space-6);
+  text-align: center;
+  background: var(--surface);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  position: relative;
+}
+
+.upload-dropzone:hover,
+.upload-dropzone.dragover {
+  border-color: var(--lecturer-primary);
+  background: rgba(15,76,92,0.02);
+}
+
+.upload-icon {
+  font-size: 3rem;
+  color: var(--lecturer-primary);
+  opacity: 0.7;
+}
+
+.upload-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.upload-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.upload-input-file {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.upload-actions {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  margin-top: var(--space-4);
+}
+
+/* Preview results section */
+.preview-summary-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.preview-stats {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.preview-stat-pill {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.preview-stat-success { background: var(--success-bg); color: #166534; }
+.preview-stat-warning { background: var(--warning-bg); color: #92400e; }
+.preview-stat-danger  { background: var(--danger-bg);  color: #991b1b; }
+
+/* ── LECTURER COMPLAINTS ─────────────────────────────────── */
+.complaints-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.complaint-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.complaint-card-header {
+  padding: var(--space-4) var(--space-5);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.student-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.student-avatar {
+  width: 36px;
+  height: 36px;
+  background: rgba(15,76,92,0.1);
+  color: var(--lecturer-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.student-name-reg {
+  display: flex;
+  flex-direction: column;
+}
+
+.student-name-lbl {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.student-reg-lbl {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.complaint-card-body {
+  padding: var(--space-5) var(--space-6);
+}
+
+.complaint-meta-bar {
+  display: flex;
+  gap: var(--space-6);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--space-3);
+}
+
+.complaint-text {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin-bottom: var(--space-5);
+}
+
+/* Inline linked scores view */
+.linked-scores-panel {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+.panel-title {
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Response Section */
+.response-entry-box {
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .courses-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .score-header-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .preview-summary-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

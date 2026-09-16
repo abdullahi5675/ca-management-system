@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Complaints — CA &amp; Complaint System</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/student.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="app-wrapper">
+
+    <!-- ── SIDEBAR ── -->
+    <nav class="sidebar" id="sidebar">
+      <button class="sidebar-close-btn" id="sidebar-close-btn"><i class="bi bi-x"></i></button>
+      <div class="sidebar-header">
+        <div class="sidebar-logo-icon"><i class="bi bi-mortarboard-fill"></i></div>
+        <div>
+          <div class="sidebar-logo-text">CA Portal</div>
+          <div class="sidebar-logo-sub">Student Section</div>
+        </div>
+      </div>
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar" id="sidebar-user-avatar">A</div>
+        <div class="sidebar-user-name" id="sidebar-user-name">Loading...</div>
+        <div class="sidebar-user-meta" id="sidebar-user-meta">Loading...</div>
+      </div>
+      <nav class="sidebar-nav">
+        <span class="sidebar-section-label">Navigation</span>
+        <a href="dashboard.html" class="nav-item">
+          <i class="bi bi-speedometer2 nav-icon"></i>Dashboard
+        </a>
+        <a href="complaint-form.html" class="nav-item">
+          <i class="bi bi-chat-left-text nav-icon"></i>File a Complaint
+        </a>
+        <a href="complaints-tracker.html" class="nav-item active">
+          <i class="bi bi-list-check nav-icon"></i>Track Complaints
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn-sidebar-logout" id="logout-btn">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+      </div>
+    </nav>
+
+    <!-- ── MAIN ── -->
+    <div class="main-wrapper">
+      <header class="mobile-topbar" id="mobile-topbar">
+        <button class="hamburger-btn" id="hamburger-btn"><i class="bi bi-list"></i></button>
+        <div class="mobile-topbar-center">
+          <span class="mobile-topbar-brand">CA Portal</span>
+          <span class="mobile-topbar-user" id="mobile-topbar-user">Student</span>
+        </div>
+        <div style="width:40px"></div>
+      </header>
+
+      <main class="app-main">
+        <div class="container">
+
+          <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+            <div>
+              <h1 style="font-size:1.5rem;margin:0;">Track Your Complaints</h1>
+              <p style="margin:4px 0 0;font-size:0.875rem;color:var(--text-secondary);">View the status and responses to all your filed grievances.</p>
+            </div>
+            <a href="complaint-form.html" class="btn btn-primary">
+              <i class="bi bi-plus-circle"></i> File New Complaint
+            </a>
+          </div>
+
+          <div class="card slide-up">
+            <div class="card-body" style="padding:0;">
+              <div class="tracker-container" id="tracker-container">
+                <!-- Loaded dynamically -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+
+      <footer class="app-footer">
+        <div class="container">
+          <p>&copy; 2026 CA &amp; Complaint Management System. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/student.js"></script>
+</body>
+</html>
