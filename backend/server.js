@@ -35,9 +35,9 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'OK', timestamp: new Date() });
 });
 
-// Root route (routes to student login by default)
+// Root route (serves the Institutional Homepage)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/student/login.html'));
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 // 404 Route handler for API endpoints
@@ -45,10 +45,11 @@ app.use('/api/*', (req, res) => {
   res.status(404).json({ error: 'API endpoint not found' });
 });
 
-// Fallback HTML routing for clean frontend navigation
+// Fallback HTML routing
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/student/login.html'));
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
+
 
 // Global error handler
 app.use((err, req, res, next) => {
