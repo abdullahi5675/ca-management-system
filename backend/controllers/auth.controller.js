@@ -37,7 +37,9 @@ const registerStudent = async (req, res) => {
 
     // Link any orphaned scores that were previously added using this reg_number
     await db.query(
-      'UPDATE scores SET student_id = $1 WHERE UPPER(reg_number) = UPPER($2)',
+      `UPDATE scores SET student_id = $1 
+       WHERE UPPER(TRIM(reg_number)) = UPPER(TRIM($2)) 
+          OR REPLACE(UPPER(reg_number), ' ', '') = REPLACE(UPPER($2), ' ', '')`,
       [newStudentId, reg_number]
     );
 

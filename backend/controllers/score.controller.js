@@ -6,7 +6,7 @@ const csv = require('csv-parser');
 const cleanStr = (str) => (str ? str.toString().trim().toLowerCase() : '');
 
 // Common logic to process score rows and UPSERT them
-const processScoreRows = async (rows, courseId, lecturerId) => {
+const processScoreRows = async (rows, courseId, lecturerId, isPublished = false) => {
   // Fetch course details
   const courseRes = await db.query('SELECT * FROM courses WHERE id = $1', [courseId]);
   if (courseRes.rows.length === 0) {
@@ -75,10 +75,15 @@ const processScoreRows = async (rows, courseId, lecturerId) => {
     }
 
     // 3. Find student if registered
-    const studentRes = await db.query('SELECT * FROM students WHERE UPPER(reg_number) = UPPER($1)', [regNumber]);
+    const studentRes = await db.query(
+      `SELECT * FROM students 
+       WHERE UPPER(TRIM(reg_number)) = UPPER(TRIM($1)) 
+          OR REPLACE(UPPER(reg_number), ' ', '') = REPLACE(UPPER($1), ' ', '')`,
+      [regNumber]
+    );
     let studentId = null;
     let status = 'saved';
-    let message = 'Score saved successfully as draft';
+    let message = isPublished ? 'Score saved and published' : 'Score saved successfully as draft';
     let studentName = 'Unregistered Student';
 
     if (studentRes.rows.length > 0) {
@@ -100,13 +105,13 @@ const processScoreRows = async (rows, courseId, lecturerId) => {
       }
     } else {
       status = 'not_registered';
-      message = 'Student is not registered yet (Saved as draft)';
+      message = isPublished ? 'Unregistered Student (Saved & Published)' : 'Student is not registered yet (Saved as draft)';
     }
 
     // 4. UPSERT score using unique constraint (reg_number, course_id)
     await db.query(
       `INSERT INTO scores (student_id, course_id, reg_number, assignment, quiz, attendance, test, others, entered_by, is_published)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, FALSE)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
        ON CONFLICT (reg_number, course_id)
        DO UPDATE SET
          student_id = EXCLUDED.student_id,
@@ -116,9 +121,9 @@ const processScoreRows = async (rows, courseId, lecturerId) => {
          test = EXCLUDED.test,
          others = EXCLUDED.others,
          entered_by = EXCLUDED.entered_by,
-         is_published = FALSE
+         is_published = EXCLUDED.is_published
        `,
-      [studentId, course.id, regNumber, assignment, quiz, attendance, test, others, lecturerId]
+      [studentId, course.id, regNumber, assignment, quiz, attendance, test, others, lecturerId, isPublished]
     );
 
     savedCount++;
@@ -254,6 +259,7 @@ const getCourseScores = async (req, res) => {
 // Publish Scores (Set is_published = TRUE)
 const publishScores = async (req, res) => {
   const { courseId } = req.params;
+  const { scores } = req.body;
   const lecturerId = req.user.id;
 
   try {
@@ -265,8 +271,28 @@ const publishScores = async (req, res) => {
       return res.status(403).json({ error: 'Access forbidden' });
     }
 
+    // If scores array was sent in request, process and save them directly as published
+    if (scores && Array.isArray(scores) && scores.length > 0) {
+      await processScoreRows(scores, courseId, lecturerId, true);
+    }
+
+    // Set all scores for this course to published
     const result = await db.query(
       'UPDATE scores SET is_published = TRUE WHERE course_id = $1 RETURNING id',
+      [courseId]
+    );
+
+    // Auto-link any registered students who matched by reg_number
+    await db.query(
+      `UPDATE scores s 
+       SET student_id = st.id 
+       FROM students st 
+       WHERE s.course_id = $1 
+         AND (s.student_id IS NULL OR s.student_id != st.id) 
+         AND (
+           UPPER(TRIM(s.reg_number)) = UPPER(TRIM(st.reg_number)) 
+           OR REPLACE(UPPER(s.reg_number), ' ', '') = REPLACE(UPPER(st.reg_number), ' ', '')
+         )`,
       [courseId]
     );
 
@@ -320,11 +346,16 @@ const getMyScores = async (req, res) => {
     if (studentRes.rows.length === 0) {
       return res.status(404).json({ error: 'Student not found' });
     }
-    const regNumber = studentRes.rows[0].reg_number;
+    const regNumber = studentRes.rows[0].reg_number.trim();
 
     // Link any orphaned scores to this student id
     await db.query(
-      'UPDATE scores SET student_id = $1 WHERE student_id IS NULL AND UPPER(TRIM(reg_number)) = UPPER(TRIM($2))',
+      `UPDATE scores SET student_id = $1 
+       WHERE (student_id IS NULL OR student_id != $1) 
+         AND (
+           UPPER(TRIM(reg_number)) = UPPER(TRIM($2)) 
+           OR REPLACE(UPPER(reg_number), ' ', '') = REPLACE(UPPER($2), ' ', '')
+         )`,
       [studentId, regNumber]
     );
 
@@ -335,19 +366,23 @@ const getMyScores = async (req, res) => {
       FROM scores s
       JOIN courses c ON s.course_id = c.id
       JOIN lecturers l ON c.lecturer_id = l.id
-      WHERE (s.student_id = $1 OR UPPER(TRIM(s.reg_number)) = UPPER(TRIM($2)))
-        AND s.is_published = TRUE
+      WHERE (
+        s.student_id = $1 
+        OR UPPER(TRIM(s.reg_number)) = UPPER(TRIM($2))
+        OR REPLACE(UPPER(s.reg_number), ' ', '') = REPLACE(UPPER($2), ' ', '')
+      )
+      AND s.is_published = TRUE
     `;
     const params = [studentId, regNumber];
     let paramIndex = 3;
 
-    if (session) {
+    if (session && session.trim() !== '') {
       queryText += ` AND c.session = $${paramIndex}`;
       params.push(session.trim());
       paramIndex++;
     }
 
-    if (semester) {
+    if (semester && String(semester).trim() !== '') {
       queryText += ` AND c.semester = $${paramIndex}`;
       params.push(Number(semester));
       paramIndex++;

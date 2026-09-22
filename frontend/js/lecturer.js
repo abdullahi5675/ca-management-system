@@ -797,10 +797,49 @@ document.addEventListener('DOMContentLoaded', () => {
     if (publishBtn) {
       publishBtn.addEventListener('click', async (e) => {
         e.preventDefault();
+
+        // 1. Gather all rows currently in the table to ensure unsaved inputs are published
+        const rows = manualTableBody.querySelectorAll('.score-row');
+        const scoresToSave = [];
+        let hasValidationErrors = false;
+
+        const maxA = parseFloat(courseInfo.max_assignment);
+        const maxQ = parseFloat(courseInfo.max_quiz);
+        const maxAt = parseFloat(courseInfo.max_attendance);
+        const maxT = parseFloat(courseInfo.max_test);
+        const maxO = parseFloat(courseInfo.max_others);
+
+        rows.forEach(tr => {
+          const regInput = tr.querySelector('.reg-input');
+          const reg_number = regInput ? regInput.value.trim().toUpperCase() : '';
+          
+          if (!reg_number) return;
+
+          const assignment = parseFloat(tr.querySelector('.ass-input').value) || 0;
+          const quiz = parseFloat(tr.querySelector('.quiz-input').value) || 0;
+          const attendance = parseFloat(tr.querySelector('.att-input').value) || 0;
+          const test = parseFloat(tr.querySelector('.test-input').value) || 0;
+          const others = parseFloat(tr.querySelector('.oth-input').value) || 0;
+
+          if (assignment > maxA || quiz > maxQ || attendance > maxAt || test > maxT || others > maxO) {
+            hasValidationErrors = true;
+            tr.style.background = 'rgba(239,68,68,0.06)';
+          } else {
+            tr.style.background = '';
+          }
+
+          scoresToSave.push({ reg_number, assignment, quiz, attendance, test, others });
+        });
+
+        if (hasValidationErrors) {
+          Utils.showToast('Validation Error', 'Some student scores exceed their configured maximum limits. Please correct the highlighted rows.', 'error');
+          return;
+        }
+
         if (confirm('Are you sure you want to Publish these grades? Students will be able to see their assessment scores immediately.')) {
           publishBtn.disabled = true;
           try {
-            await API.post(`/scores/publish/${courseId}`);
+            await API.post(`/scores/publish/${courseId}`, { scores: scoresToSave });
             Utils.showToast('Scores Published', 'Score sheet has been published and locked.', 'success');
             await loadCurrentScores();
           } catch (err) {
