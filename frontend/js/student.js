@@ -46,15 +46,20 @@ document.addEventListener('DOMContentLoaded', () => {
   async function initDashboard() {
     const sessionSelect = document.getElementById('session-select');
     const semesterSelect = document.getElementById('semester-select');
+    const filterBtn = document.getElementById('filter-btn');
     const scoresTableBody = document.getElementById('scores-table-body');
     const complaintsList = document.getElementById('complaints-list');
 
     // Load dynamic session list
     await loadSessionFilterList();
 
-    // Reload scores on filter changes
+    // Reload scores on filter changes & search button click
     if (sessionSelect) sessionSelect.addEventListener('change', loadScores);
     if (semesterSelect) semesterSelect.addEventListener('change', loadScores);
+    if (filterBtn) filterBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      loadScores();
+    });
 
     // Initial loads
     await loadScores();
@@ -64,16 +69,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!sessionSelect) return;
       try {
         const sessions = await API.get('/courses/sessions');
-        sessionSelect.innerHTML = '';
-        if (sessions.length === 0) {
-          sessionSelect.innerHTML = '<option value="2025/2026">2025/2026 Session</option>';
-          return;
-        }
-        sessions.forEach((s, idx) => {
+        sessionSelect.innerHTML = '<option value="" selected>All Sessions</option>';
+        sessions.forEach((s) => {
           const opt = document.createElement('option');
           opt.value = s;
           opt.textContent = `${s} Session`;
-          if (idx === 0) opt.selected = true; // Select latest session
           sessionSelect.appendChild(opt);
         });
       } catch (err) {

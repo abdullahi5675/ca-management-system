@@ -84,6 +84,7 @@ const processScoreRows = async (rows, courseId, lecturerId) => {
     if (studentRes.rows.length > 0) {
       const student = studentRes.rows[0];
       studentName = student.name;
+      studentId = student.id;
 
       // Validate department and level
       const studentDept = cleanStr(student.department);
@@ -91,11 +92,11 @@ const processScoreRows = async (rows, courseId, lecturerId) => {
       const studentLvl = cleanStr(student.level);
       const courseLvl = cleanStr(course.level);
 
-      if (studentDept === courseDept && studentLvl === courseLvl) {
-        studentId = student.id;
-      } else {
+      // Support multi-department courses (comma-separated in course.department)
+      const courseDepts = courseDept.split(',').map(d => d.trim().toLowerCase());
+      if (!courseDepts.includes(studentDept) || studentLvl !== courseLvl) {
         status = 'dept_level_mismatch';
-        message = `Mismatch (Student is ${student.department} ${student.level}, Course is ${course.department} ${course.level})`;
+        message = `Notice: Student is ${student.department} ${student.level}, Course is ${course.department} ${course.level}`;
       }
     } else {
       status = 'not_registered';
@@ -313,33 +314,47 @@ const getMyScores = async (req, res) => {
   const studentId = req.user.id;
   const { session, semester } = req.query;
 
-  let queryText = `
-    SELECT s.assignment, s.quiz, s.attendance, s.test, s.others, s.total,
-           c.id as course_id, c.course_code, c.course_name, c.session, c.semester,
-           l.name as lecturer_name
-    FROM scores s
-    JOIN courses c ON s.course_id = c.id
-    JOIN lecturers l ON c.lecturer_id = l.id
-    WHERE s.student_id = $1 AND s.is_published = TRUE
-  `;
-  const params = [studentId];
-  let paramIndex = 2;
-
-  if (session) {
-    queryText += ` AND c.session = $${paramIndex}`;
-    params.push(session);
-    paramIndex++;
-  }
-
-  if (semester) {
-    queryText += ` AND c.semester = $${paramIndex}`;
-    params.push(Number(semester));
-    paramIndex++;
-  }
-
-  queryText += ` ORDER BY c.course_code ASC`;
-
   try {
+    // Fetch student's reg_number so we can also match scores saved before registration
+    const studentRes = await db.query('SELECT reg_number FROM students WHERE id = $1', [studentId]);
+    if (studentRes.rows.length === 0) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+    const regNumber = studentRes.rows[0].reg_number;
+
+    // Link any orphaned scores to this student id
+    await db.query(
+      'UPDATE scores SET student_id = $1 WHERE student_id IS NULL AND UPPER(TRIM(reg_number)) = UPPER(TRIM($2))',
+      [studentId, regNumber]
+    );
+
+    let queryText = `
+      SELECT s.assignment, s.quiz, s.attendance, s.test, s.others, s.total,
+             c.id as course_id, c.course_code, c.course_name, c.session, c.semester,
+             l.name as lecturer_name
+      FROM scores s
+      JOIN courses c ON s.course_id = c.id
+      JOIN lecturers l ON c.lecturer_id = l.id
+      WHERE (s.student_id = $1 OR UPPER(TRIM(s.reg_number)) = UPPER(TRIM($2)))
+        AND s.is_published = TRUE
+    `;
+    const params = [studentId, regNumber];
+    let paramIndex = 3;
+
+    if (session) {
+      queryText += ` AND c.session = $${paramIndex}`;
+      params.push(session.trim());
+      paramIndex++;
+    }
+
+    if (semester) {
+      queryText += ` AND c.semester = $${paramIndex}`;
+      params.push(Number(semester));
+      paramIndex++;
+    }
+
+    queryText += ` ORDER BY c.course_code ASC`;
+
     const result = await db.query(queryText, params);
     return res.status(200).json(result.rows);
   } catch (error) {

@@ -12,7 +12,7 @@ const studentRoutes = require('./routes/student.routes');
 const lecturerRoutes = require('./routes/lecturer.routes');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
