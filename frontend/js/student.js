@@ -50,10 +50,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoresTableBody = document.getElementById('scores-table-body');
     const complaintsList = document.getElementById('complaints-list');
 
-    // Load dynamic session list
-    await loadSessionFilterList();
+    // 1. Populate Student Sheet Meta Header IMMEDIATELY
+    const sheetStudentName = document.getElementById('sheet-student-name');
+    const sheetStudentMeta = document.getElementById('sheet-student-meta');
+    const sheetSessionLabel = document.getElementById('sheet-session-label');
+    const sheetDate = document.getElementById('sheet-date');
 
-    // Reload scores on filter changes & search button click
+    if (sheetStudentName) sheetStudentName.textContent = user.name || 'Student';
+    if (sheetStudentMeta) sheetStudentMeta.textContent = `Reg No: ${user.reg_number || 'N/A'}  |  Dept: ${user.department || 'N/A'}  |  Level: ${user.level || 'N/A'}`;
+    if (sheetDate) sheetDate.textContent = new Date().toLocaleDateString('en-NG', { year: 'numeric', month: 'short', day: 'numeric' });
+
+    // 2. Print / Download PDF Handler
+    const downloadSheetBtn = document.getElementById('download-sheet-btn');
+    if (downloadSheetBtn) {
+      downloadSheetBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.print();
+      });
+    }
+
+    // 3. Attach filter event listeners
     if (sessionSelect) sessionSelect.addEventListener('change', loadScores);
     if (semesterSelect) semesterSelect.addEventListener('change', loadScores);
     if (filterBtn) filterBtn.addEventListener('click', (e) => {
@@ -61,7 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
       loadScores();
     });
 
-    // Initial loads
+    // 4. Load dynamic sessions in background & trigger initial data fetches
+    loadSessionFilterList();
     await loadScores();
     await loadRecentComplaints();
 
@@ -80,25 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Failed to load sessions for student:', err);
       }
     }
-
-    // Print / Download PDF Handler
-    const downloadSheetBtn = document.getElementById('download-sheet-btn');
-    if (downloadSheetBtn) {
-      downloadSheetBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.print();
-      });
-    }
-
-    // Populate Student Sheet Meta Header
-    const sheetStudentName = document.getElementById('sheet-student-name');
-    const sheetStudentMeta = document.getElementById('sheet-student-meta');
-    const sheetSessionLabel = document.getElementById('sheet-session-label');
-    const sheetDate = document.getElementById('sheet-date');
-
-    if (sheetStudentName) sheetStudentName.textContent = user.name;
-    if (sheetStudentMeta) sheetStudentMeta.textContent = `Reg No: ${user.reg_number}  |  Dept: ${user.department}  |  Level: ${user.level}`;
-    if (sheetDate) sheetDate.textContent = new Date().toLocaleDateString('en-NG', { year: 'numeric', month: 'short', day: 'numeric' });
 
     async function loadScores() {
       if (!scoresTableBody) return;
